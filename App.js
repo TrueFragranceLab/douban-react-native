@@ -5,6 +5,7 @@ import HomePage from './page/HomePage'
 import DetailsPage from './page/DetailsPage'
 import SearchPage from './page/SearchPage'
 
+
 const RootStack = createStackNavigator(
   {
     Home: HomePage,
