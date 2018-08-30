@@ -1,25 +1,19 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { createStackNavigator } from 'react-navigation'
 
-export interface Props {}
+// Page Route
+import HomePage from './page/HomePage'
+import DetailsPage from './page/DetailsPage'
+import SearchPage from './page/SearchPage'
 
-interface State {}
-
-export default class App extends React.Component<Props, State> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>真香警告！11！！</Text>
-      </View>
-    )
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const RootStack = createStackNavigator(
+  {
+    Home: HomePage,
+    Details: DetailsPage,
+    Search: SearchPage,
   },
-})
+  {
+    initialRouteName: 'Home',
+  },
+)
+
+export default RootStack
