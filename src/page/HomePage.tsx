@@ -1,6 +1,15 @@
 import React from 'react'
 import { View, Button, Text } from 'react-native'
 import { getMovieList } from '../services/movie'
+import { connect } from 'react-redux'
+import { RootState, TodoState } from '../reducers/state'
+
+const mapStateToProps = (state : { todos: TodoState }) => {
+  return {
+    todos: state.todos
+  }
+}
+​
 const styles = {
   container: {
     marginBottom: 25,
@@ -9,6 +18,7 @@ const styles = {
 
 type Props = {
   navigation: any,
+  todos: RootState["todos"]
 }
 
 // type State = {
@@ -33,6 +43,9 @@ class HomePage extends React.Component<Props, any> {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+          { this.props.todos.map((item, idx) => <Text key={idx}>{ item.id }</Text>) }
+        </View>
         <View style={styles.container}>
           <Button title="前往详细页" onPress={() => this.goTo('Details')} />
         </View>
@@ -55,4 +68,4 @@ class HomePage extends React.Component<Props, any> {
   }
 }
 
-export default HomePage
+export default connect(mapStateToProps)(HomePage)
