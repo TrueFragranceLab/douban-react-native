@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Button } from 'react-native'
-
+import { View, Button, Text } from 'react-native'
+import { getMovieList } from '../services/movie'
 const styles = {
   container: {
     marginBottom: 25,
@@ -11,7 +11,11 @@ type Props = {
   navigation: any,
 }
 
-class HomePage extends React.Component<Props> {
+// type State = {
+//   movie: Object,
+// }
+
+class HomePage extends React.Component<Props, any> {
   static navigationOptions = {
     title: '豆瓣电影首页',
   }
@@ -37,6 +41,17 @@ class HomePage extends React.Component<Props> {
         </View>
       </View>
     )
+  }
+
+  componentDidMount() {
+    getMovieList('top')
+      .then(res => res.json())
+      .then(res => {
+        alert(res.subjects)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 
