@@ -4,6 +4,6 @@
   "bracketSpacing": true,
   "semi": false,
   "jsxBracketSameLine": true,
-  "parser": "flow"
+  "parser": "typescript"
 }
   
