@@ -1,16 +1,21 @@
 // I am a typing file ...
 
 export interface TodoState {
-  id: string;
-  text: string;
-  completed: boolean;
+  id: string
+  text: string
+  completed: boolean
 }
 
 export interface FuckState {
-  bb: string;
+  bb: string
+}
+
+export interface MoiveState {
+  title: string
 }
 
 export interface RootState {
-  todos: TodoState[];
-  fuck: FuckState;
+  todos: TodoState[]
+  fuck: FuckState
+  movies: MoiveState[]
 }

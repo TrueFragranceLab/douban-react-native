@@ -1,15 +1,22 @@
 import React from 'react'
-import { View, Button, Text } from 'react-native'
-import { getMovieList } from '../services/movie'
+import { View, Button, Text, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import { RootState, TodoState } from '../reducers/state'
+import { bindActionCreators } from 'redux'
+import { RootState, MoiveState } from '../reducers/state'
+import { getMovieData } from '../actions/movie'
 
-const mapStateToProps = (state : { todos: TodoState }) => {
+const mapStateToProps = (state: { movies: MoiveState }) => {
   return {
-    todos: state.todos
+    movies: state.movies,
   }
 }
-​
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators({ getMovieData }, dispatch),
+  }
+}
+
 const styles = {
   container: {
     marginBottom: 25,
@@ -17,23 +24,22 @@ const styles = {
 }
 
 type Props = {
-  navigation: any,
-  todos: RootState["todos"]
+  navigation: any
+  movies: RootState['movies']
+  actions: {
+    getMovieData: () => any
+  }
 }
 
-// type State = {
-//   movie: Object,
-// }
+type State = {}
 
-class HomePage extends React.Component<Props, any> {
+class HomePage extends React.Component<Props, State> {
   static navigationOptions = {
     title: '豆瓣电影首页',
   }
 
   constructor(props: Props) {
     super(props)
-    // this.goToDetailsPage = this.goTo.bind(this, 'Details')
-    // this.goToSearchPage = this.goTo.bind(this, 'Search')
   }
 
   goTo(pageName: string) {
@@ -44,7 +50,9 @@ class HomePage extends React.Component<Props, any> {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <View>
-          { this.props.todos.map((item, idx) => <Text key={idx}>{ item.id }</Text>) }
+          {this.props.movies.map((item, idx) => (
+            <Text key={idx}>{item.title}</Text>
+          ))}
         </View>
         <View style={styles.container}>
           <Button title="前往详细页" onPress={() => this.goTo('Details')} />
@@ -57,15 +65,12 @@ class HomePage extends React.Component<Props, any> {
   }
 
   componentDidMount() {
-    getMovieList('top')
-      .then(res => res.json())
-      .then(res => {
-        alert(res.subjects)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    const { actions } = this.props
+    actions.getMovieData()
   }
 }
 
-export default connect(mapStateToProps)(HomePage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(HomePage)
