@@ -6,8 +6,8 @@ export namespace TodoActions {
 }
 
 export type TodoActions = {
-  type: String;
-  id: string;
-  text: string;
-  completed: boolean;
+  type: String
+  id: string
+  text: string
+  completed: boolean
 }
