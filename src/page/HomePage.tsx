@@ -3,7 +3,7 @@ import { View, Button, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RootState, MoiveState } from '../reducers/state'
-import { getMovieData } from '../actions/movie'
+import { ActionTypes } from '../actions/movie'
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -24,24 +24,19 @@ const mapStateToProps = (state: { movies: MoiveState }) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({ getMovieData }, dispatch),
+    getMovieDataRequest: () =>
+      dispatch({ type: ActionTypes.GET_MOVIE_REQUEST }),
   }
 }
 
 interface Props {
   navigation: any
   movies: RootState['movies']
-  actions: {
-    getMovieData: () => any
-  }
+  getMovieDataRequest: () => void
 }
 
 type State = {}
 
-@(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-) as any)
 class HomePage extends React.Component<Props, State> {
   static navigationOptions = {
     title: '豆瓣电影首页',
@@ -64,9 +59,12 @@ class HomePage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { actions } = this.props
-    actions.getMovieData()
+    const { getMovieDataRequest } = this.props
+    getMovieDataRequest()
   }
 }
 
-export default HomePage
+export default connect(
+  mapStateToProps as any,
+  mapDispatchToProps as any,
+)(HomePage)
