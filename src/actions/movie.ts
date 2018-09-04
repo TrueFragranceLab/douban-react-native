@@ -1,29 +1,13 @@
-import { MovieTypeEnum, getMovieList } from '../services/movie'
-
-export namespace MovieActions {
-  export enum Type {
-    GET_MOVIE = 'GET_MOVIE',
-  }
+export enum ActionTypes {
+  GET_MOVIE = 'GET_MOVIE',
 }
 
-export type MovieActions = {
+export type TMovieActions = {
   type: String
   moves: []
 }
 
-function fetchMovieData() {
-  getMovieList(MovieTypeEnum.HOT)
-    .then(res => res.json())
-    .then(res => {
-      const movies = res.subjects
-    })
-    .catch(error => {
-      console.log(error)
-    })
-}
-
-export function getMovieData() {
-  return {
-    type: MovieActions.Type.GET_MOVIE,
-  }
-}
+export const getMovieData = (): TMovieActions => ({
+  type: ActionTypes.GET_MOVIE,
+  moves: [],
+})

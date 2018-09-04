@@ -1,9 +1,20 @@
 import React from 'react'
-import { View, Button, Text, FlatList } from 'react-native'
+import { View, Button, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, Dispatch } from 'redux'
 import { RootState, MoiveState } from '../reducers/state'
 import { getMovieData } from '../actions/movie'
+
+const styles = StyleSheet.create({
+  pageContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  container: {
+    marginBottom: 25,
+  },
+})
 
 const mapStateToProps = (state: { movies: MoiveState }) => {
   return {
@@ -11,19 +22,13 @@ const mapStateToProps = (state: { movies: MoiveState }) => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({ getMovieData }, dispatch),
   }
 }
 
-const styles = {
-  container: {
-    marginBottom: 25,
-  },
-}
-
-type Props = {
+interface Props {
   navigation: any
   movies: RootState['movies']
   actions: {
@@ -33,13 +38,13 @@ type Props = {
 
 type State = {}
 
+@(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+) as any)
 class HomePage extends React.Component<Props, State> {
   static navigationOptions = {
     title: '豆瓣电影首页',
-  }
-
-  constructor(props: Props) {
-    super(props)
   }
 
   goTo(pageName: string) {
@@ -48,17 +53,11 @@ class HomePage extends React.Component<Props, State> {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.pageContainer}>
         <View>
           {this.props.movies.map((item, idx) => (
             <Text key={idx}>{item.title}</Text>
           ))}
-        </View>
-        <View style={styles.container}>
-          <Button title="前往详细页" onPress={() => this.goTo('Details')} />
-        </View>
-        <View style={styles.container}>
-          <Button title="前往搜索页" onPress={() => this.goTo('Search')} />
         </View>
       </View>
     )
@@ -70,7 +69,4 @@ class HomePage extends React.Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HomePage)
+export default HomePage
