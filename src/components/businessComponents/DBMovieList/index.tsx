@@ -1,21 +1,76 @@
 import React from 'react'
-import { Text, FlatList } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  FlatList,
+  ListRenderItemInfo,
+  TouchableHighlight,
+} from 'react-native'
 
-interface IItem {
-  name: string
-}
+import { movieItem } from '../../../models/movies'
 
 type Props = {
-  movies: [IItem]
+  movies: [movieItem]
+  pressHandler: (id: string) => any
 }
 
-const DBMoiveList: React.SFC<Props> = props => {
-  return (
-    <FlatList
-      data={props.movies}
-      renderItem={({ item }) => <Text>{item.name}</Text>}
-    />
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  cellImage: {
+    width: 55,
+    height: 80,
+    marginRight: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '500',
+  },
+  textContainer: {
+    flex: 1,
+  },
+  director: {
+    marginTop: 5,
+    color: '#333333',
+  },
+})
+
+class DBMoiveList extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <FlatList
+        data={this.props.movies}
+        keyExtractor={this._keyExtractor}
+        renderItem={this._renderItem}
+      />
+    )
+  }
+
+  _keyExtractor = (item: movieItem) => item.id
+
+  _renderItem = ({ item }: ListRenderItemInfo<movieItem>) => (
+    <TouchableHighlight onPress={() => this._onpress(item, this.props)}>
+      <View style={styles.container} key={item.id}>
+        <Image style={styles.cellImage} source={{ uri: item.images.large }} />
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.director}>{this.directorsName(item)}</Text>
+        </View>
+      </View>
+    </TouchableHighlight>
   )
-}
 
-module.exports = DBMoiveList
+  directorsName = (item: movieItem) => `导演: ${item.directors[0].name}`
+
+  _onpress = (item: movieItem, props: Props) => props.pressHandler(item.id)
+}
+export default DBMoiveList

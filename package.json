@@ -24,6 +24,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@rematch/core": "^1.0.0-beta.4",
     "@types/react-navigation": "^2.0.19",
     "@types/react-redux": "^6.0.6",
     "expo": "^27.0.1",

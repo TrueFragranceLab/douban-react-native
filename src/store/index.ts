@@ -1,14 +1,10 @@
-import { Store, createStore } from 'redux'
+import { init } from '@rematch/core'
 
-// types
-import { RootState } from '../reducers/state'
+import * as models from '../models'
+export { models }
 
-// reducers
-import { RootReducer } from '../reducers'
+export type models = typeof models
 
-export function configureStore(initialState?: RootState): Store<RootState> {
-  const store = createStore(RootReducer as any, initialState as any) as Store<
-    RootState
-  >
-  return store
-}
+export const store = init({
+  models,
+})

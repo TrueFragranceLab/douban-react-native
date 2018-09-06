@@ -1,39 +1,29 @@
 import React from 'react'
-import { View, Button, Text, FlatList } from 'react-native'
+import { View, Button, Text } from 'react-native'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { RootState, MoiveState } from '../reducers/state'
-import { getMovieData } from '../actions/movie'
+import { RematchDispatch, RematchRootState } from '@rematch/core'
+import { models } from '../store'
+import { movieItem } from '../models/movies'
+import DBMovieList from '../components/businessComponents/DBMovieList'
 
-const mapStateToProps = (state: { movies: MoiveState }) => {
-  return {
-    movies: state.movies,
-  }
-}
+const mapState = (state: RematchRootState<models>) => ({
+  movies: state.movies.movies,
+})
 
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators({ getMovieData }, dispatch),
-  }
-}
+const mapDispatch = (dispatch: RematchDispatch<models>) => ({
+  asyncLoadMovieData: () => dispatch.movies.asyncLoadMovieData(),
+})
 
-const styles = {
-  container: {
-    marginBottom: 25,
-  },
-}
-
-type Props = {
+interface Props
+  extends Partial<ReturnType<typeof mapState>>,
+    Partial<ReturnType<typeof mapDispatch>> {
   navigation: any
-  movies: RootState['movies']
-  actions: {
-    getMovieData: () => any
-  }
+  movies: [movieItem]
+  asyncLoadMovieData: () => void
+  _pressHandler: (id: string) => void
 }
 
-type State = {}
-
-class HomePage extends React.Component<Props, State> {
+class HomePage extends React.Component<Props> {
   static navigationOptions = {
     title: '豆瓣电影首页',
   }
@@ -48,29 +38,26 @@ class HomePage extends React.Component<Props, State> {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View>
-          {this.props.movies.map((item, idx) => (
-            <Text key={idx}>{item.title}</Text>
-          ))}
-        </View>
-        <View style={styles.container}>
-          <Button title="前往详细页" onPress={() => this.goTo('Details')} />
-        </View>
-        <View style={styles.container}>
-          <Button title="前往搜索页" onPress={() => this.goTo('Search')} />
-        </View>
+      <View style={{ flex: 1 }}>
+        <DBMovieList
+          movies={this.props.movies}
+          pressHandler={this._pressHandler}
+        />
       </View>
     )
   }
 
+  _pressHandler(id: string): void {
+    console.log(id)
+  }
+
   componentDidMount() {
-    const { actions } = this.props
-    actions.getMovieData()
+    const { asyncLoadMovieData } = this.props
+    asyncLoadMovieData()
   }
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  mapState as any,
+  mapDispatch as any,
 )(HomePage)

@@ -7,4 +7,4 @@ const DBHeader: React.SFC<Props> = () => {
   return <View />
 }
 
-module.exports = DBHeader
+export default DBHeader
